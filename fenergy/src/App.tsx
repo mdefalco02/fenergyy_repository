@@ -24,7 +24,7 @@ const NAVIGATION: Navigation = [
 
 const BRANDING = {
   title: 'Fenergy',   
-  logo : <img src="/images/fenergy-logo-removebg-preview.png"/>
+  logo : <img src="/images/fenergy-logo-removebg-preview.png" style={{maxHeight :"80px"}}/>
 };
 
 export default function App() {
