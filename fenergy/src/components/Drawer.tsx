@@ -64,6 +64,7 @@ interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
   handleClose?: () => void;
   setData?: React.Dispatch<React.SetStateAction<any>>;
+  addPersona?: any;
 }
 
 const AppBar = styled(MuiAppBar, {
@@ -102,6 +103,7 @@ export default function PersistentDrawerRight({
   open,
   handleClose,
   setData,
+  addPersona,
 }: AppBarProps) {
   const theme = useTheme();
   const [drawerOpen, setDrawerOpen] = React.useState(false);
@@ -148,7 +150,7 @@ export default function PersistentDrawerRight({
             handleClose?.();
           }}
         >
-          {({ errors, touched }) => (
+          {({ errors, touched, values }) => (
             <Form>
               <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                 <Field
@@ -186,8 +188,8 @@ export default function PersistentDrawerRight({
                   name="email"
                   label="Email"
                   size="small"
-                  error={touched.email && Boolean(errors.email)}
-                  helperText={touched.email && errors.email}
+                  // error={touched.email && Boolean(errors.email)}
+                  // helperText={touched.email && errors.email}
                 />
                 <Field
                   as={TextField}
@@ -207,7 +209,11 @@ export default function PersistentDrawerRight({
                   <Button variant="outlined" onClick={handleClose}>
                     Annulla
                   </Button>
-                  <Button type="submit" variant="contained">
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    onClick={async () => await addPersona(values)}
+                  >
                     Salva
                   </Button>
                 </Box>
