@@ -362,9 +362,9 @@ export default function DashboardPage() {
     {
       icon: <DeleteIcon />,
       color: "error" as const,
-      onClick: (row: any) => {
+      onClick: async (row: any) => {
         console.log("DELETE riga:", row);
-        deletePersona({ variables: { id: row.id_dipendente } });
+        await deletePersona({ variables: { id: row.id_dipendente } });
       },
     },
   ];
