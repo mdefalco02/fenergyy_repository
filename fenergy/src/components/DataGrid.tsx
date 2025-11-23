@@ -1,56 +1,63 @@
+import { IconButton, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
-import { DataGrid, type GridColDef } from "@mui/x-data-grid";
+import {
+  DataGrid,
+  type GridColDef,
+  type GridRenderCellParams,
+} from "@mui/x-data-grid";
+import { memo, useMemo, type JSX } from "react";
 
-const columns: GridColDef[] = [
-  {
-    field: "nome",
-    headerName: "Nome",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "cognome",
-    headerName: "Cognome",
-    width: 150,
-    editable: true,
-  },
-  {
-    field: "codiceFiscale",
-    headerName: "Codice Fiscale",
-    type: "number",
-    width: 110,
-    editable: true,
-  },
-  {
-    field: "telefono",
-    headerName: "Telefono",
-    sortable: false,
-    width: 160,
-  },
-  {
-    field: "email",
-    headerName: "email",
-    sortable: false,
-    width: 160,
-  },
-
-  {
-    field: "indirizzo",
-    headerName: "Indirizzo",
-    sortable: false,
-    width: 160,
-  },
-];
-
-interface DataGridProps {
-  rows: any[];
+interface ActionButton {
+  icon: JSX.Element;
+  color: string;
+  onClick: any;
 }
-export default function DataGridDemo({ rows }: DataGridProps) {
+
+type ActionsButton = ActionButton[];
+
+interface DatagridProps {
+  rows: any;
+  columns: GridColDef[];
+  actions?: any;
+}
+export default memo(function DataGridDemo({
+  rows,
+  columns,
+  actions,
+}: DatagridProps) {
+  const columnsWithActions = useMemo(() => {
+    if (!actions || actions.length === 0) return columns;
+
+    const actionColumn: GridColDef = {
+      field: "__actions",
+      headerName: "Azioni",
+      width: 120,
+      sortable: false,
+      filterable: false,
+      disableColumnMenu: true,
+      renderCell: (params: GridRenderCellParams) => (
+        <Stack direction="row" spacing={1}>
+          {actions.map((action: any, index: any) => (
+            <IconButton
+              key={index}
+              size="small"
+              color={action.color ?? "primary"}
+              onClick={() => action.onClick(params.row)}
+            >
+              {action.icon}
+            </IconButton>
+          ))}
+        </Stack>
+      ),
+    };
+
+    return [...columns, actionColumn];
+  }, [columns, actions]);
   return (
     <Box sx={{ height: 400, width: "100%" }}>
       <DataGrid
-        rows={rows || []}
-        columns={columns}
+        rows={rows}
+        columns={columnsWithActions}
         initialState={{
           pagination: {
             paginationModel: {
@@ -58,11 +65,11 @@ export default function DataGridDemo({ rows }: DataGridProps) {
             },
           },
         }}
+        getRowId={(rows) => rows.id_dipendente}
         pageSizeOptions={[5]}
         checkboxSelection
-        getRowId={(row) => row.id_dipendente}
         disableRowSelectionOnClick
       />
     </Box>
   );
-}
+});
