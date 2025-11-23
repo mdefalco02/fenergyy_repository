@@ -1,14 +1,13 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
-import { NhostProvider } from '@nhost/react'
-import nhost from '../config/nhostClient.tsx'
-import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import Layout from './layouts/dashboard.tsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import nhost from "../config/nhostClient.tsx";
+import App from "./App.tsx";
+import "./index.css";
+import Layout from "./layouts/dashboard.tsx";
 
-import DashboardPage from './pages';
-import OrdersPage from './pages/orders';
+import { NhostApolloProvider } from "@nhost/react-apollo";
+import DashboardPage from "./pages";
 
 //...
 const router = createBrowserRouter([
@@ -16,16 +15,12 @@ const router = createBrowserRouter([
     Component: App, // root layout route
     children: [
       {
-        path: '/',
+        path: "/",
         Component: Layout,
         children: [
           {
-            path: '',
+            path: "",
             Component: DashboardPage,
-          },
-          {
-            path: 'orders',
-            Component: OrdersPage,
           },
         ],
       },
@@ -34,12 +29,10 @@ const router = createBrowserRouter([
 ]);
 //...
 
-
-
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <NhostProvider nhost={nhost}>
+    <NhostApolloProvider nhost={nhost}>
       <RouterProvider router={router} />
-    </NhostProvider>
-  </StrictMode>,
-)
+    </NhostApolloProvider>
+  </StrictMode>
+);
