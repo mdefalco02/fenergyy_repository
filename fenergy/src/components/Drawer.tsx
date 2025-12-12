@@ -28,11 +28,11 @@ export default function CustomDrawer({
   anchor,
   sx,
   variant,
-  width,
 }: CustomDrawerProps) {
   const currentWidth = useMemo(() => {
-    return open ? width : collapsedWidth;
-  }, [open, width]);
+    return open ? drawerWidth : collapsedWidth;
+  }, [open]);
+
   return (
     <Drawer
       anchor={anchor ?? "right"}
