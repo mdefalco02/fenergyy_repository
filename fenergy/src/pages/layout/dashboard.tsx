@@ -1,5 +1,6 @@
 import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+import LightModeIcon from "@mui/icons-material/LightMode";
 import Diversity3Icon from "@mui/icons-material/Diversity3";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
@@ -15,9 +16,10 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+  useColorScheme,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import CustomDrawer from "../../components/Drawer";
 import type { NavItem } from "../../types";
@@ -55,7 +57,14 @@ const navItems: NavItem[] = [
 export default function Layout() {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const { mode, setMode } = useColorScheme();
+  // useEffect(() => {
+  //   if (!mode) return;
+  //   setMode("light");
+  //   console.log("mode", mode);
+  // }, [mode, setMode]);
 
+  console.log("mode", mode);
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
@@ -95,8 +104,9 @@ export default function Layout() {
             aria-label="open drawer"
             edge="start"
             sx={{ mr: 2 }}
+            onClick={() => setMode(mode === "light" ? "dark" : "light")}
           >
-            <DarkModeIcon />
+            {mode === "dark" ? <DarkModeIcon /> : <LightModeIcon />}
           </IconButton>
         </Toolbar>
       </AppBar>
