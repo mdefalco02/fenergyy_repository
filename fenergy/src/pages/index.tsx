@@ -1,12 +1,10 @@
 import {
   ApolloCache,
-  gql,
   useMutation,
   useQuery,
   type DefaultContext,
   type FetchResult,
   type MutationFunctionOptions,
-  type MutationResult,
   type OperationVariables,
 } from "@apollo/client";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -18,6 +16,14 @@ import { Field, Form, FormikProvider, useFormik } from "formik";
 import { useMemo, useState } from "react";
 import DataGrid from "../components/Datagrid";
 import CustomDrawer from "../components/Drawer";
+import Tabs from "../components/Tabs";
+import {
+  ADD_PERSONA_ONE,
+  DELETE_PERSONA,
+  GET_ALL_PERSONE,
+  UPDATE_PERSONA_ONE,
+} from "../gql/queries";
+
 const columns: GridColDef[] = [
   { field: "nome", headerName: "Nome", width: 90 },
   {
@@ -47,96 +53,6 @@ const columns: GridColDef[] = [
     width: 160,
   },
 ];
-
-const GET_ALL_PERSONE = gql`
-  query getAllPersone {
-    persona {
-      id_dipendente
-      nome
-      cognome
-      codiceFiscale
-      telefono
-      email
-      indirizzo
-    }
-  }
-`;
-
-const ADD_PERSONA_ONE = gql`
-  mutation addPersonaOne(
-    $nome: String!
-    $cognome: String!
-    $codiceFiscale: String!
-    $telefono: String!
-    $email: String!
-    $indirizzo: String!
-  ) {
-    insert_persona_one(
-      object: {
-        nome: $nome
-        cognome: $cognome
-        codiceFiscale: $codiceFiscale
-        telefono: $telefono
-        email: $email
-        indirizzo: $indirizzo
-      }
-    ) {
-      id_dipendente
-      nome
-      cognome
-      codiceFiscale
-      telefono
-      email
-      indirizzo
-    }
-  }
-`;
-
-const DELETE_PERSONA = gql`
-  mutation DeletePersona($id: uuid!) {
-    delete_persona_by_pk(id_dipendente: $id) {
-      id_dipendente
-      nome
-      cognome
-      codiceFiscale
-      telefono
-      email
-      indirizzo
-    }
-  }
-`;
-
-const UPDATE_PERSONA_ONE = gql`
-  mutation UpdatePersonaOne(
-    $id_dipendente: uuid!
-    $nome: String
-    $cognome: String
-    $codiceFiscale: String
-    $telefono: String
-    $email: String
-    $indirizzo: String
-  ) {
-    update_persona_by_pk(
-      pk_columns: { id_dipendente: $id_dipendente }
-      _set: {
-        nome: $nome
-        cognome: $cognome
-        codiceFiscale: $codiceFiscale
-        telefono: $telefono
-        email: $email
-        indirizzo: $indirizzo
-      }
-    ) {
-      id_dipendente
-      nome
-      cognome
-      codiceFiscale
-      telefono
-      email
-      indirizzo
-    }
-  }
-`;
 
 export interface PersonaProps {
   id_dipendente?: string;
@@ -169,20 +85,147 @@ interface FormDipendenteProps {
       | undefined
   ) => Promise<FetchResult<any>>;
   editRow: any;
-  open: any;
-  setOpen: any;
+  handleClose: any;
   setEditingRow: any;
   updatePersona: any;
-  loadingInsert?: MutationResult<any>;
-  loadingUpdate?: MutationResult<any>;
 }
 
 function FormDipendente({
   addDipendente,
   editRow,
   setEditingRow,
-  open,
-  setOpen,
+  handleClose,
+  updatePersona,
+}: FormDipendenteProps) {
+  const formik = useFormik({
+    initialValues: editRow ?? initialValues,
+    enableReinitialize: true,
+    onSubmit: async (element, helpers) => {
+      try {
+        //controllo che la variabile di stato "oggetto" editRow abbia una length maggiore di 1
+        // se sì procedo con il fare update sennò insert
+        if (Object.keys(editRow).length > 0) {
+          const res = await updatePersona({
+            variables: {
+              id_dipendente: element.id_dipendente,
+              nome: element.nome,
+              cognome: element.cognome,
+              codiceFiscale: element.codiceFiscale,
+              telefono: element.telefono,
+              email: element.email,
+              indirizzo: element.indirizzo,
+            },
+          });
+          console.log("res", res);
+          if (res.data.update_persona_by_pk) {
+            helpers.resetForm();
+            handleClose(); // 👈 chiudiamo il drawer
+          }
+        } else {
+          const res = await addDipendente({
+            variables: {
+              nome: element.nome,
+              cognome: element.cognome,
+              codiceFiscale: element.codiceFiscale,
+              telefono: element.telefono,
+              email: element.email,
+              indirizzo: element.indirizzo,
+            },
+          });
+          if (res.data?.insert_persona_one) {
+            helpers.resetForm();
+            handleClose(); // 👈 chiudiamo il drawer
+          }
+        }
+      } catch (err) {
+        console.error("Errore nella mutation addPersonaOne", err);
+      }
+    },
+  });
+
+  return (
+    <FormikProvider value={formik}>
+      <Form>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            marginTop: "10px",
+          }}
+        >
+          <Field
+            as={TextField}
+            name="nome"
+            label="Nome"
+            size="small"
+            fullWidth
+          />
+          <Field
+            as={TextField}
+            name="cognome"
+            label="Cognome"
+            size="small"
+            fullWidth
+          />
+
+          <Field
+            as={TextField}
+            name="codiceFiscale"
+            label="Codice fiscale"
+            size="small"
+            fullWidth
+          />
+
+          <Field
+            as={TextField}
+            name="telefono"
+            label="Telefono"
+            size="small"
+            fullWidth
+          />
+
+          <Field
+            as={TextField}
+            name="email"
+            label="Email"
+            type="email"
+            size="small"
+            fullWidth
+          />
+
+          <Field
+            as={TextField}
+            name="indirizzo"
+            label="Indirizzo"
+            size="small"
+            fullWidth
+          />
+
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+            <Button variant="contained" onClick={() => handleClose()}>
+              Indietro
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={() => formik.handleSubmit()}
+              disabled={formik.isSubmitting}
+            >
+              Salva
+            </Button>
+          </Box>
+        </Box>
+      </Form>
+    </FormikProvider>
+  );
+}
+
+function FormASD({
+  addDipendente,
+  editRow,
+  setEditingRow,
+  handleClose,
   updatePersona,
 }: FormDipendenteProps) {
   const formik = useFormik({
@@ -207,7 +250,7 @@ function FormDipendente({
           console.log("res", res);
           if (res.data.update_persona_by_pk) {
             helpers.resetForm();
-            setOpen(false); // 👈 chiudiamo il drawer
+            handleClose(); // 👈 chiudiamo il drawer
           }
         } else {
           const res = await addDipendente({
@@ -222,7 +265,7 @@ function FormDipendente({
           });
           if (res.data?.insert_persona_one) {
             helpers.resetForm();
-            setOpen(false); // 👈 chiudiamo il drawer
+            handleClose(); // 👈 chiudiamo il drawer
           }
         }
       } catch (err) {
@@ -233,97 +276,78 @@ function FormDipendente({
 
   return (
     <FormikProvider value={formik}>
-      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-        <Button
-          variant="outlined"
-          onClick={() => {
-            setEditingRow(null);
-            setOpen(true);
+      <Form>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            marginTop: "10px",
           }}
         >
-          <AddBoxIcon></AddBoxIcon> CREA
-        </Button>
-      </Box>
-      <CustomDrawer
-        title={"Aggiungi un dipendente"}
-        open={open}
-        handleClose={() => setOpen(false)}
-      >
-        <Form>
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-              marginTop: "10px",
-            }}
-          >
-            <Field
-              as={TextField}
-              name="nome"
-              label="Nome"
-              size="small"
-              fullWidth
-            />
-            <Field
-              as={TextField}
-              name="cognome"
-              label="Cognome"
-              size="small"
-              fullWidth
-            />
+          <Field
+            as={TextField}
+            name="nome"
+            label="Nome"
+            size="small"
+            fullWidth
+          />
+          <Field
+            as={TextField}
+            name="cognome"
+            label="Cognome"
+            size="small"
+            fullWidth
+          />
 
-            <Field
-              as={TextField}
-              name="codiceFiscale"
-              label="Codice fiscale"
-              size="small"
-              fullWidth
-            />
+          <Field
+            as={TextField}
+            name="codiceFiscale"
+            label="Codice fiscale"
+            size="small"
+            fullWidth
+          />
 
-            <Field
-              as={TextField}
-              name="telefono"
-              label="Telefono"
-              size="small"
-              fullWidth
-            />
+          <Field
+            as={TextField}
+            name="telefono"
+            label="Telefono"
+            size="small"
+            fullWidth
+          />
 
-            <Field
-              as={TextField}
-              name="email"
-              label="Email"
-              type="email"
-              size="small"
-              fullWidth
-            />
+          <Field
+            as={TextField}
+            name="email"
+            label="Email"
+            type="email"
+            size="small"
+            fullWidth
+          />
 
-            <Field
-              as={TextField}
-              name="indirizzo"
-              label="Indirizzo"
-              size="small"
-              fullWidth
-            />
+          <Field
+            as={TextField}
+            name="indirizzo"
+            label="Indirizzo"
+            size="small"
+            fullWidth
+          />
 
-            <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+            <Button variant="contained" onClick={() => handleClose()}>
+              Indietro
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              onClick={() => formik.handleSubmit()}
+              disabled={formik.isSubmitting}
             >
-              <Button variant="contained" onClick={() => setOpen(false)}>
-                Indietro
-              </Button>
-              <Button
-                type="submit"
-                variant="contained"
-                onClick={() => formik.handleSubmit()}
-                disabled={formik.isSubmitting}
-              >
-                Salva
-              </Button>
-            </Box>
+              Salva
+            </Button>
           </Box>
-        </Form>
-      </CustomDrawer>
+        </Box>
+      </Form>
     </FormikProvider>
   );
 }
@@ -341,6 +365,9 @@ export default function DashboardPage() {
     awaitRefetchQueries: true,
   });
   const memoizedRows = useMemo(() => data?.persona ?? [], [data?.persona]);
+
+  console.log("rows", memoizedRows);
+
   const actions = [
     {
       icon: <EditIcon />,
@@ -373,16 +400,71 @@ export default function DashboardPage() {
     refetchQueries: [{ query: GET_ALL_PERSONE }],
   });
 
+  //TODO - Manage of ri-rendering
+  const tabs = [
+    {
+      label: "Anagrafica",
+      content: (
+        <FormDipendente
+          addDipendente={addDipendente}
+          editRow={editRow}
+          setEditingRow={setEditingRow}
+          updatePersona={updatePersona}
+          handleClose={() => setOpen(false)}
+        ></FormDipendente>
+      ),
+      value: "1",
+    },
+    {
+      label: "ASD",
+      content: (
+        <FormDipendente
+          addDipendente={addDipendente}
+          editRow={editRow}
+          setEditingRow={setEditingRow}
+          updatePersona={updatePersona}
+          handleClose={() => setOpen(false)}
+        ></FormDipendente>
+      ),
+      value: "2",
+    },
+    {
+      label: "Gestione operativa",
+      content: (
+        <FormDipendente
+          addDipendente={addDipendente}
+          editRow={editRow}
+          setEditingRow={setEditingRow}
+          updatePersona={updatePersona}
+          handleClose={() => setOpen(false)}
+        ></FormDipendente>
+      ),
+      value: "3",
+    },
+  ];
+
+  console.log("OOOOO", tabs);
+
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <FormDipendente
-        addDipendente={addDipendente}
-        editRow={editRow}
+      <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            setEditingRow({});
+            setOpen(true);
+          }}
+        >
+          <AddBoxIcon></AddBoxIcon> CREA
+        </Button>
+      </Box>
+      <CustomDrawer
+        title={"Aggiunta dipendente"}
         open={open}
-        setOpen={setOpen}
-        setEditingRow={setEditingRow}
-        updatePersona={updatePersona}
-      ></FormDipendente>
+        handleClose={() => setOpen(false)}
+      >
+        <Tabs tabs={tabs} />
+      </CustomDrawer>
       <Box sx={{ marginTop: "10px" }}>
         <DataGrid
           rows={memoizedRows}
