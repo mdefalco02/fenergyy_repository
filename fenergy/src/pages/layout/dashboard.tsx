@@ -1,6 +1,9 @@
-import FilterNoneOutlinedIcon from "@mui/icons-material/FilterNoneOutlined"; // FINANZA (come screenshot)
+import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import Diversity3Icon from "@mui/icons-material/Diversity3";
+import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
+import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
-import HandymanOutlinedIcon from "@mui/icons-material/HandymanOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
@@ -18,31 +21,27 @@ import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import CustomDrawer from "../../components/Drawer";
 import type { NavItem } from "../../types";
-import logo from "/images/fenergy-logo.png";
-
-import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-
+import logo from "/images/FEnergy-logo-gestionale-def-nb.png";
 const drawerWidth = 320;
 
 const navItems: NavItem[] = [
   {
-    icon: <GroupsOutlinedIcon></GroupsOutlinedIcon>,
+    icon: <Diversity3Icon></Diversity3Icon>,
     label: "Clienti",
     to: "clienti",
   },
   {
-    icon: <HandymanOutlinedIcon></HandymanOutlinedIcon>,
+    icon: <FitnessCenterIcon></FitnessCenterIcon>,
     label: "Schede",
     to: "schede",
   },
   {
-    icon: <FilterNoneOutlinedIcon></FilterNoneOutlinedIcon>,
+    icon: <CurrencyExchangeIcon></CurrencyExchangeIcon>,
     label: "Finanza",
     to: "finance",
   },
   {
-    icon: <PersonOutlinedIcon></PersonOutlinedIcon>,
+    icon: <GroupsOutlinedIcon></GroupsOutlinedIcon>,
     label: "Dipendenti",
     to: "dipendenti",
   },
@@ -75,7 +74,13 @@ export default function Layout() {
           }),
         }}
       >
-        <Toolbar>
+        <Toolbar
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            backgroundColor: "#000000",
+          }}
+        >
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -84,6 +89,14 @@ export default function Layout() {
             sx={{ mr: 2 }}
           >
             <MenuIcon />
+          </IconButton>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            sx={{ mr: 2 }}
+          >
+            <DarkModeIcon />
           </IconButton>
         </Toolbar>
       </AppBar>
