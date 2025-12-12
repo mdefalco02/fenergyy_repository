@@ -31,12 +31,16 @@ export default memo(function DataGridDemo({
     const actionColumn: GridColDef = {
       field: "__actions",
       headerName: "Azioni",
-      width: 120,
-      sortable: false,
-      filterable: false,
-      disableColumnMenu: true,
+      flex: 1,
+      headerAlign: "center",
+      align: "center",
       renderCell: (params: GridRenderCellParams) => (
-        <Stack direction="row" spacing={1}>
+        <Stack
+          direction="row"
+          spacing={1}
+          justifyContent="center"
+          sx={{ width: "100%", height: "100%" }}
+        >
           {actions.map((action: any, index: any) => (
             <IconButton
               key={index}
@@ -54,7 +58,7 @@ export default memo(function DataGridDemo({
     return [...columns, actionColumn];
   }, [columns, actions]);
   return (
-    <Box sx={{ height: 400, width: "100%" }}>
+    <Box sx={{ width: "100%", height: "100%" }}>
       <DataGrid
         rows={rows}
         columns={columnsWithActions}
@@ -65,9 +69,16 @@ export default memo(function DataGridDemo({
             },
           },
         }}
+        sx={{
+          width: "100%",
+          height: "100%",
+          "& .MuiDataGrid-cell": {
+            textAlign: "center",
+          },
+        }}
         getRowId={(rows) => rows.id_dipendente}
         pageSizeOptions={[5]}
-        checkboxSelection
+        checkboxSelection={false}
         disableRowSelectionOnClick
       />
     </Box>

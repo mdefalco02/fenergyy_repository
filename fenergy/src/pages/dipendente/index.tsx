@@ -14,43 +14,48 @@ import { Box, Button, TextField } from "@mui/material";
 import { type GridColDef } from "@mui/x-data-grid";
 import { Field, Form, FormikProvider, useFormik } from "formik";
 import { useMemo, useState } from "react";
-import DataGrid from "../components/Datagrid";
-import CustomDrawer from "../components/Drawer";
-import Tabs from "../components/Tabs";
+import DataGrid from "../../components/Datagrid";
+import CustomDrawer from "../../components/Drawer";
+import Tabs from "../../components/Tabs";
 import {
   ADD_PERSONA_ONE,
   DELETE_PERSONA,
   GET_ALL_PERSONE,
   UPDATE_PERSONA_ONE,
-} from "../gql/queries";
+} from "../../gql/queries";
 
 const columns: GridColDef[] = [
-  { field: "nome", headerName: "Nome", width: 90 },
+  { field: "nome", headerName: "Nome", flex: 1, headerAlign: "center" },
   {
     field: "cognome",
     headerName: "Cognome",
-    width: 150,
+    flex: 1,
+    headerAlign: "center",
   },
 
   {
     field: "codiceFiscale",
     headerName: "Codice Fiscale",
-    width: 150,
+    flex: 1,
+    headerAlign: "center",
   },
   {
     field: "telefono",
     headerName: "Telefono",
-    width: 150,
+    flex: 1,
+    headerAlign: "center",
   },
   {
     field: "indirizzo",
     headerName: "Indirizzo",
-    width: 110,
+    flex: 1,
+    headerAlign: "center",
   },
   {
     field: "email",
     headerName: "Email",
-    width: 160,
+    flex: 1,
+    headerAlign: "center",
   },
 ];
 
@@ -352,7 +357,7 @@ function FormASD({
   );
 }
 
-export default function DashboardPage() {
+export default function GestioneDipendente() {
   const { data } = useQuery(GET_ALL_PERSONE);
   const [deletePersona] = useMutation(DELETE_PERSONA, {
     refetchQueries: [GET_ALL_PERSONE],
@@ -442,8 +447,6 @@ export default function DashboardPage() {
       value: "3",
     },
   ];
-
-  console.log("OOOOO", tabs);
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
