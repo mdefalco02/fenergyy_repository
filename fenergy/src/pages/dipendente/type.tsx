@@ -17,7 +17,7 @@ export const columns: GridColDef[] = [
   },
 
   {
-    field: "codiceFiscale",
+    field: "codice_fiscale",
     headerName: "Codice Fiscale",
     flex: 1,
     headerAlign: "center",
@@ -40,26 +40,42 @@ export const columns: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
   },
+  {
+    field: "data_nascita",
+    headerName: "Data di nascita",
+    flex: 1,
+    headerAlign: "center",
+  },
+  {
+    field: "iban",
+    headerName: "Iban",
+    flex: 1,
+    headerAlign: "center",
+  },
 ];
 
-export interface PersonaProps {
+export interface DipendenteProps {
   id_dipendente?: string;
   nome: string;
   cognome: string;
-  codiceFiscale: string;
+  codice_fiscale: string;
   telefono: string;
   email: string;
   indirizzo: string;
+  data_nascita: string;
+  iban: string;
 }
 
-export const initialValues: PersonaProps = {
+export const initialValues: DipendenteProps = {
   id_dipendente: "",
   nome: "",
   cognome: "",
-  codiceFiscale: "",
+  codice_fiscale: "",
   telefono: "",
   email: "",
   indirizzo: "",
+  data_nascita: "",
+  iban: "",
 };
 
 export interface FormDipendenteProps {

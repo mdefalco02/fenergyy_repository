@@ -8,41 +8,46 @@ import DataGrid from "../../components/Datagrid";
 import FormDrawer from "../../components/FormDrawer";
 import Tabs from "../../components/Tabs";
 import {
-  ADD_PERSONA_ONE,
-  DELETE_PERSONA,
-  GET_ALL_PERSONE,
-  UPDATE_PERSONA_ONE,
+  ADD_DIPENDENTE_ONE,
+  DELETE_DIPENDENTE,
+  GET_ALL_DIPENDENTI,
+  UPDATE_DIPENDENTE_ONE,
 } from "../../gql/queries";
 import FormDipendente from "./TabForm";
-import { columns, type PersonaProps } from "./type";
+import { columns, type DipendenteProps } from "./type";
 
 export default function GestioneDipendente() {
-  const { data } = useQuery(GET_ALL_PERSONE);
-  const [deletePersona] = useMutation(DELETE_PERSONA, {
-    refetchQueries: [GET_ALL_PERSONE],
+  const { data } = useQuery(GET_ALL_DIPENDENTI);
+  const [deletePersona] = useMutation(DELETE_DIPENDENTE, {
+    refetchQueries: [GET_ALL_DIPENDENTI],
     awaitRefetchQueries: true,
   });
   const [editRow, setEditingRow] = useState({});
   const [open, setOpen] = useState(false);
-  const [updatePersona] = useMutation(UPDATE_PERSONA_ONE, {
-    refetchQueries: [GET_ALL_PERSONE],
+  const [updatePersona] = useMutation(UPDATE_DIPENDENTE_ONE, {
+    refetchQueries: [GET_ALL_DIPENDENTI],
     awaitRefetchQueries: true,
   });
-  const memoizedRows = useMemo(() => data?.persona ?? [], [data?.persona]);
+  const memoizedRows = useMemo(
+    () => data?.dipendente ?? [],
+    [data?.dipendente]
+  );
 
   const actions = [
     {
       icon: <EditIconOutlined />,
       color: "primary" as const,
       onClick: (row: any) => {
-        const persona: PersonaProps = {
+        const persona: DipendenteProps = {
           id_dipendente: row.id_dipendente,
           nome: row.nome,
           cognome: row.cognome,
-          codiceFiscale: row.codiceFiscale,
+          codice_fiscale: row.codice_fiscale,
           telefono: row.telefono,
           email: row.email,
           indirizzo: row.indirizzo,
+          data_nascita: row.data_nascita,
+          iban: row.iban,
         };
         setEditingRow(persona);
         setOpen(true);
@@ -52,14 +57,18 @@ export default function GestioneDipendente() {
       icon: <DeleteIconOutlined />,
       color: "error" as const,
       onClick: async (row: any) => {
-        console.log("DELETE riga:", row);
-        await deletePersona({ variables: { id: row.id_dipendente } });
+        console.log("DELETE riga:", row, {
+          variables: { id: row.id_dipendente },
+        });
+        await deletePersona({
+          variables: { id_dipendente: row.id_dipendente },
+        });
       },
     },
   ];
 
-  const [addDipendente] = useMutation(ADD_PERSONA_ONE, {
-    refetchQueries: [{ query: GET_ALL_PERSONE }],
+  const [addDipendente] = useMutation(ADD_DIPENDENTE_ONE, {
+    refetchQueries: [{ query: GET_ALL_DIPENDENTI }],
   });
 
   //TODO - Manage of ri-rendering

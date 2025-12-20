@@ -22,10 +22,12 @@ export default function FormDipendente({
               id_dipendente: element.id_dipendente,
               nome: element.nome,
               cognome: element.cognome,
-              codiceFiscale: element.codiceFiscale,
+              codice_fiscale: element.codice_fiscale,
               telefono: element.telefono,
               email: element.email,
               indirizzo: element.indirizzo,
+              iban: element.iban,
+              data_nascita: element.data_nascita,
             },
           });
           console.log("res", res);
@@ -38,10 +40,12 @@ export default function FormDipendente({
             variables: {
               nome: element.nome,
               cognome: element.cognome,
-              codiceFiscale: element.codiceFiscale,
+              codice_fiscale: element.codice_fiscale,
               telefono: element.telefono,
               email: element.email,
               indirizzo: element.indirizzo,
+              iban: element.iban,
+              data_nascita: element.data_nascita,
             },
           });
           if (res.data?.insert_persona_one) {
@@ -83,7 +87,7 @@ export default function FormDipendente({
 
           <Field
             as={TextField}
-            name="codiceFiscale"
+            name="codice_fiscale"
             label="Codice fiscale"
             size="small"
             fullWidth
@@ -110,6 +114,20 @@ export default function FormDipendente({
             as={TextField}
             name="indirizzo"
             label="Indirizzo"
+            size="small"
+            fullWidth
+          />
+          <Field
+            as={TextField}
+            name="data_nascita"
+            label="Data di nascita"
+            size="small"
+            fullWidth
+          />
+          <Field
+            as={TextField}
+            name="iban"
+            label="iban"
             size="small"
             fullWidth
           />
