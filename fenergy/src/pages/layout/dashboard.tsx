@@ -1,10 +1,6 @@
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import DarkModeIcon from "@mui/icons-material/DarkMode";
+
 import LightModeIcon from "@mui/icons-material/LightMode";
-import Diversity3Icon from "@mui/icons-material/Diversity3";
-import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
-import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
-import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
   AppBar,
@@ -16,80 +12,37 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  useColorScheme,
   useTheme,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
-import CustomDrawer from "../../components/Drawer";
-import type { NavItem } from "../../types";
+import SidenavDrawer from "../../components/SidenavDrawer";
+import { drawerWidth, navItems } from "../../components/types";
 import logo from "/images/FEnergy-logo-gestionale-def-nb.png";
-const drawerWidth = 320;
-
-const navItems: NavItem[] = [
-  {
-    icon: <Diversity3Icon></Diversity3Icon>,
-    label: "Clienti",
-    to: "clienti",
-  },
-  {
-    icon: <FitnessCenterIcon></FitnessCenterIcon>,
-    label: "Schede",
-    to: "schede",
-  },
-  {
-    icon: <CurrencyExchangeIcon></CurrencyExchangeIcon>,
-    label: "Finanza",
-    to: "finance",
-  },
-  {
-    icon: <GroupsOutlinedIcon></GroupsOutlinedIcon>,
-    label: "Dipendenti",
-    to: "dipendenti",
-  },
-  {
-    icon: <FolderOutlinedIcon></FolderOutlinedIcon>,
-    label: "Archivio multimediale",
-    to: "archivio",
-  },
-];
 
 export default function Layout() {
   const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const { mode, setMode } = useColorScheme();
-  // useEffect(() => {
-  //   if (!mode) return;
-  //   setMode("light");
-  //   console.log("mode", mode);
-  // }, [mode, setMode]);
 
-  console.log("mode", mode);
+  console.log(theme.palette.mode);
+  const [open, setOpen] = useState(false);
+  const transition = theme.transitions.create(["width", "margin"], {
+    easing: theme.transitions.easing.easeOut,
+    duration: theme.transitions.duration.standard,
+  });
+
   return (
     <Box sx={{ display: "flex" }}>
       <AppBar
         sx={{
-          transition: theme.transitions.create(["margin", "width"], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.leavingScreen,
-          }),
+          transition,
           ...(open && {
             width: `calc(100% - ${drawerWidth}px)`,
             ml: `${drawerWidth}px`,
-            transition: theme.transitions.create(["margin", "width"], {
-              easing: theme.transitions.easing.easeOut,
-              duration: theme.transitions.duration.enteringScreen,
-            }),
+            transition,
           }),
         }}
       >
-        <Toolbar
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            backgroundColor: "#000000",
-          }}
-        >
+        <Toolbar>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -104,65 +57,68 @@ export default function Layout() {
             aria-label="open drawer"
             edge="start"
             sx={{ mr: 2 }}
-            onClick={() => setMode(mode === "light" ? "dark" : "light")}
           >
-            {mode === "dark" ? <DarkModeIcon /> : <LightModeIcon />}
+            {theme.palette.mode !== "dark" ? (
+              <DarkModeIcon />
+            ) : (
+              <LightModeIcon />
+            )}
           </IconButton>
         </Toolbar>
       </AppBar>
 
-      <CustomDrawer
-        variant="persistent"
+      <SidenavDrawer
+        variant="permanent"
         anchor="left"
+        logo={logo}
         open={open}
         handleClose={() => setOpen(false)}
-        width={drawerWidth}
+        sx={{
+          padding: "32px 16px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexDirection: "column",
+          "&. MuiBackdrop-root": {
+            display: "none",
+          },
+        }}
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-          }}
-        >
-          <Box component="img" src={logo} alt="logo" sx={{ width: 270 }} />
-          <List sx={{ width: "100%", height: "100%" }}>
-            {navItems.map((item) => (
-              <ListItem key={item.to} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  component={NavLink}
-                  to={item.to}
+        <List sx={{ width: "100%", height: "100%" }}>
+          {navItems.map((item) => (
+            <ListItem key={item.to} disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                component={NavLink}
+                to={item.to}
+                sx={{
+                  minHeight: 48,
+                  px: 2.5,
+                  justifyContent: open ? "initial" : "center",
+                  "&.active": {
+                    // stile quando la route è attiva
+                    backgroundColor: "action.selected",
+                  },
+                }}
+              >
+                <ListItemIcon
                   sx={{
-                    minHeight: 48,
-                    px: 2.5,
-                    justifyContent: open ? "initial" : "center",
-                    "&.active": {
-                      // stile quando la route è attiva
-                      backgroundColor: "action.selected",
-                    },
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
                   }}
                 >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    {item.icon}
-                  </ListItemIcon>
+                  {item.icon}
+                </ListItemIcon>
 
-                  <ListItemText
-                    primary={item.label}
-                    sx={{ opacity: open ? 1 : 0 }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </CustomDrawer>
+                <ListItemText
+                  primary={item.label}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </SidenavDrawer>
 
       <Box
         component="main"
@@ -173,10 +129,7 @@ export default function Layout() {
           display: "flex",
           flexDirection: "column",
           ml: 0,
-          transition: theme.transitions.create(["margin", "width"], {
-            easing: theme.transitions.easing.easeOut,
-            duration: theme.transitions.duration.enteringScreen,
-          }),
+          transition,
         }}
       >
         <Toolbar /> {/* sposta giù il contenuto sotto l'AppBar */}

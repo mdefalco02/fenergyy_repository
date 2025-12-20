@@ -7,15 +7,15 @@ import {
   type MutationFunctionOptions,
   type OperationVariables,
 } from "@apollo/client";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
+import AddBoxIconOutlined from "@mui/icons-material/AddBox";
+import DeleteIconOutlined from "@mui/icons-material/Delete";
+import EditIconOutlined from "@mui/icons-material/Edit";
 import { Box, Button, TextField } from "@mui/material";
 import { type GridColDef } from "@mui/x-data-grid";
 import { Field, Form, FormikProvider, useFormik } from "formik";
 import { useMemo, useState } from "react";
 import DataGrid from "../../components/Datagrid";
-import CustomDrawer from "../../components/Drawer";
+import FormDrawer from "../../components/FormDrawer";
 import Tabs from "../../components/Tabs";
 import {
   ADD_PERSONA_ONE,
@@ -375,7 +375,7 @@ export default function GestioneDipendente() {
 
   const actions = [
     {
-      icon: <EditIcon />,
+      icon: <EditIconOutlined />,
       color: "primary" as const,
       onClick: (row: any) => {
         const persona: PersonaProps = {
@@ -392,7 +392,7 @@ export default function GestioneDipendente() {
       },
     },
     {
-      icon: <DeleteIcon />,
+      icon: <DeleteIconOutlined />,
       color: "error" as const,
       onClick: async (row: any) => {
         console.log("DELETE riga:", row);
@@ -458,16 +458,19 @@ export default function GestioneDipendente() {
             setOpen(true);
           }}
         >
-          <AddBoxIcon></AddBoxIcon> CREA
+          <AddBoxIconOutlined /> CREA
         </Button>
       </Box>
-      <CustomDrawer
+      <FormDrawer
         title={"Aggiunta dipendente"}
         open={open}
+        anchor="right"
+        variant="temporary"
         handleClose={() => setOpen(false)}
+        sx={{ padding: "32px 16px" }}
       >
         <Tabs tabs={tabs} />
-      </CustomDrawer>
+      </FormDrawer>
       <Box sx={{ marginTop: "10px" }}>
         <DataGrid
           rows={memoizedRows}

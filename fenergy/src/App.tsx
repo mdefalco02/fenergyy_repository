@@ -1,11 +1,13 @@
-import { createTheme, ThemeProvider, useTheme } from "@mui/material";
-import { Outlet } from "react-router";
+import { CssBaseline, ThemeProvider } from "@mui/material";
+import Layout from "./pages/layout/dashboard";
 import { theme } from "./theme";
 
 export default function App() {
   return (
-    <ThemeProvider theme={theme} defaultMode="light">
-      <Outlet />
+    //TO-DO Add dark theme
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Layout></Layout>
     </ThemeProvider>
   );
 }
