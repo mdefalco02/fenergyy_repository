@@ -33,6 +33,7 @@ export default function GestioneDipendente() {
     [data?.dipendente]
   );
 
+  console.log("rows", memoizedRows);
   const actions = [
     {
       icon: <EditIconOutlined />,
@@ -139,6 +140,7 @@ export default function GestioneDipendente() {
       </FormDrawer>
       <Box sx={{ marginTop: "10px" }}>
         <DataGrid
+          keyRowId="id_dipendente"
           rows={memoizedRows}
           columns={columns}
           actions={actions}

@@ -2,6 +2,7 @@ import { IconButton, Stack } from "@mui/material";
 import Box from "@mui/material/Box";
 import {
   DataGrid,
+  type DataGridProps,
   type GridColDef,
   type GridRenderCellParams,
 } from "@mui/x-data-grid";
@@ -15,16 +16,20 @@ interface ActionButton {
 
 type ActionsButton = ActionButton[];
 
-interface DatagridProps {
+interface DatagridProps extends DataGridProps {
   rows: any;
   columns: GridColDef[];
-  actions?: any;
+  actions?: ActionsButton;
+  keyRowId: string | number;
+  // rowId: string | number;
 }
 export default memo(function DataGridDemo({
   rows,
   columns,
   actions,
+  keyRowId,
 }: DatagridProps) {
+  console.log("str with ");
   const columnsWithActions = useMemo(() => {
     if (!actions || actions.length === 0) return columns;
 
@@ -76,7 +81,7 @@ export default memo(function DataGridDemo({
             textAlign: "center",
           },
         }}
-        getRowId={(rows) => rows.id_dipendente}
+        getRowId={(row) => row[keyRowId]}
         pageSizeOptions={[5]}
         checkboxSelection={false}
         disableRowSelectionOnClick
