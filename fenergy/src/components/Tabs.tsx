@@ -9,7 +9,7 @@ import type { JSX } from "react";
 export interface TabItem {
   value: string; // es. "1", "2", "3" o "settimana-1"
   label: string; // testo della tab
-  content?: React.ReactNode | JSX.Element; // cosa renderizzare nel pannello
+  content?: React.ReactNode; // cosa renderizzare nel pannello
 }
 
 interface TabsProps {
@@ -55,7 +55,17 @@ export default React.memo(function Tabs({
         </Box>
 
         {tabs.map((tab) => (
-          <TabPanel key={tab.value} value={tab.value}>
+          <TabPanel
+            key={tab.value}
+            value={tab.value}
+            sx={{
+              paddingLeft: 0,
+              paddingRight: 0,
+              gap: 2,
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             {tab.content}
           </TabPanel>
         ))}

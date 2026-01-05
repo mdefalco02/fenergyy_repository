@@ -29,7 +29,6 @@ export default memo(function DataGridDemo({
   actions,
   keyRowId,
 }: DatagridProps) {
-  console.log("str with ");
   const columnsWithActions = useMemo(() => {
     if (!actions || actions.length === 0) return columns;
 
@@ -62,6 +61,7 @@ export default memo(function DataGridDemo({
 
     return [...columns, actionColumn];
   }, [columns, actions]);
+
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
       <DataGrid

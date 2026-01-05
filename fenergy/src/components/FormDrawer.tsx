@@ -5,10 +5,16 @@ import { memo, useMemo } from "react";
 import { collapsedWidth, drawerWidth, type FormDrawerProps } from "./types";
 
 const FormDrawer = memo(function FormDrawer(props: FormDrawerProps) {
-  const { title, open, handleClose, children } = props;
+  const { title, open, handleClose, children, paperWidth } = props;
+
+  //Fixed width
   const currentWidth = useMemo(() => {
-    return open ? drawerWidth : collapsedWidth;
-  }, [open]);
+    if (!paperWidth) {
+      return open ? drawerWidth : collapsedWidth;
+    } else {
+      return open ? paperWidth : collapsedWidth;
+    }
+  }, [open, paperWidth]);
 
   const memoizatedTitle = useMemo(() => {
     return title ?? "";

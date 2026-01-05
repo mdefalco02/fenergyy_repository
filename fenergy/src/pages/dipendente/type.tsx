@@ -54,7 +54,7 @@ export const columns: GridColDef[] = [
   },
 ];
 
-export interface DipendenteProps {
+export interface AnagraficaProps {
   id_dipendente?: string;
   nome: string;
   cognome: string;
@@ -66,8 +66,58 @@ export interface DipendenteProps {
   iban: string;
 }
 
-export const initialValues: DipendenteProps = {
-  id_dipendente: "",
+export interface ContrattoProps {
+  dipendente_id?: string;
+  id_contratto?: string;
+  ruolo: string;
+  tipo_contratto: string;
+  data_inizio: string;
+  data_fine: string;
+  compenso: number;
+  ore_settimanali: number;
+}
+
+export interface GestioneOperativaProps {
+  dipendente_id?: string;
+  corso_id?: string;
+  giorni: string;
+  orari: string;
+  numero_iscritti: number;
+  ore_assenza: number;
+}
+export interface CorsoProps {
+  corso_id?: string;
+  nome_corso: string;
+  // ???
+  durata: number;
+}
+
+export const initialContrattoValues: ContrattoProps = {
+  data_inizio: "",
+  id_contratto: undefined,
+  ruolo: "",
+  tipo_contratto: "",
+  data_fine: "",
+  compenso: 0,
+  ore_settimanali: 0,
+};
+
+export const initialGestioneOperativaValues: GestioneOperativaProps = {
+  corso_id: undefined,
+  giorni: "",
+  orari: "",
+  numero_iscritti: 0,
+  ore_assenza: 0,
+};
+
+export const initialCorsoValues: CorsoProps = {
+  corso_id: undefined,
+  nome_corso: "",
+  durata: 0,
+};
+
+export const initialAnagraficaValues: AnagraficaProps = {
+  id_dipendente: undefined,
   nome: "",
   cognome: "",
   codice_fiscale: "",
@@ -79,7 +129,7 @@ export const initialValues: DipendenteProps = {
 };
 
 export interface FormDipendenteProps {
-  addDipendente: (
+  add: (
     options?:
       | MutationFunctionOptions<
           any,
@@ -92,5 +142,5 @@ export interface FormDipendenteProps {
   editRow: any;
   handleClose: any;
   setEditingRow: any;
-  updatePersona: any;
+  update: any;
 }

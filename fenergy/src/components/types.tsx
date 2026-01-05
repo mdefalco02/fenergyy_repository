@@ -3,7 +3,7 @@ import Diversity3Icon from "@mui/icons-material/Diversity3";
 import FitnessCenterIcon from "@mui/icons-material/FitnessCenter";
 import FolderOutlinedIcon from "@mui/icons-material/FolderOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
-import type { DrawerProps } from "@mui/material";
+import type { DrawerProps, ModalProps } from "@mui/material";
 
 //Navigation items props
 export interface NavItem {
@@ -21,6 +21,7 @@ export interface FormDrawerProps extends DrawerProps {
   // funzione che chiude il drawer
   handleClose: () => void;
   children?: React.ReactNode;
+  paperWidth?: number;
 }
 
 //SidenavDrawer properties
@@ -61,3 +62,11 @@ export const navItems: NavItem[] = [
     to: "archivio",
   },
 ];
+
+export interface ConfirmModalProps {
+  title: string;
+  description: string;
+  open: boolean;
+  handleClose: () => void;
+  handleConfirm: any;
+}
