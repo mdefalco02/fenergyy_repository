@@ -410,13 +410,25 @@ export default function GestioneDipendente() {
           anchor="right"
           variant="temporary"
           handleClose={() => setOpen(false)}
-          sx={{ padding: "32px 16px" }}
+          sx={{ padding: "32px 16px", display: "flex", flex: 1 }}
           paperWidth={450}
         >
-          <Form>
+          <Form
+            style={{
+              height: "100%",
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              minHeight: 0,
+            }}
+          >
             <Tabs tabs={tabs} />
             <Box
-              sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                mt: "auto",
+              }}
             >
               <Button variant="contained" onClick={() => setOpen(false)}>
                 Indietro

@@ -38,9 +38,9 @@ const FormDrawer = memo(function FormDrawer(props: FormDrawerProps) {
         },
       }}
     >
-      <Box sx={{ padding: "32px 16px" }}>
+      <Box sx={{ padding: "32px 16px", width: "100%", height: "100%" }}>
         {memoizatedTitle ?? <Typography>{memoizatedTitle}</Typography>}
-        <Box>{children}</Box>
+        <Box sx={{ width: "100%", height: "100%" }}>{children}</Box>
       </Box>
     </Drawer>
   );

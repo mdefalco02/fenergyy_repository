@@ -45,11 +45,14 @@ export default React.memo(function Tabs({
           <TabList
             onChange={handleChange}
             variant="scrollable" // 🔥 abilita lo scroll
-            scrollButtons="auto" // mostra le frecce quando servono
+            scrollButtons={false} // mostra le frecce quando servono
             allowScrollButtonsMobile // (opzionale) frecce anche su mobile
+            sx={{
+              "& .MuiTabs-scrollButtons.Mui-disabled": { display: "none" },
+            }}
           >
             {tabs.map((tab, index) => (
-              <Tab key={index} value={tab.value} label={tab.label} />
+              <Tab key={tab.value} value={tab.value} label={tab.label} />
             ))}
           </TabList>
         </Box>
@@ -64,6 +67,9 @@ export default React.memo(function Tabs({
               gap: 2,
               display: "flex",
               flexDirection: "column",
+              "&[hidden]": {
+                display: "none !important",
+              },
             }}
           >
             {tab.content}
