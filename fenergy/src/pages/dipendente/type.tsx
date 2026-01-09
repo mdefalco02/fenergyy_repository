@@ -6,6 +6,7 @@ import type {
   OperationVariables,
 } from "@apollo/client";
 import { type GridColDef } from "@mui/x-data-grid";
+import dayjs from "dayjs";
 
 export const columns: GridColDef[] = [
   { field: "nome", headerName: "Nome", flex: 1, headerAlign: "center" },
@@ -15,40 +16,28 @@ export const columns: GridColDef[] = [
     flex: 1,
     headerAlign: "center",
   },
-
   {
-    field: "codice_fiscale",
-    headerName: "Codice Fiscale",
+    field: "ruolo",
+    headerName: "Ruolo",
     flex: 1,
     headerAlign: "center",
   },
   {
-    field: "telefono",
-    headerName: "Telefono",
+    field: "data_inizio",
+    headerName: "Data Inizio",
+    flex: 1,
+    headerAlign: "center",
+    valueFormatter: (params: any) => dayjs(params.value).format("DD/MM/YYYY"),
+  },
+  {
+    field: "ore_settimanali",
+    headerName: "Ore settimanali",
     flex: 1,
     headerAlign: "center",
   },
   {
-    field: "indirizzo",
-    headerName: "Indirizzo",
-    flex: 1,
-    headerAlign: "center",
-  },
-  {
-    field: "email",
-    headerName: "Email",
-    flex: 1,
-    headerAlign: "center",
-  },
-  {
-    field: "data_nascita",
-    headerName: "Data di nascita",
-    flex: 1,
-    headerAlign: "center",
-  },
-  {
-    field: "iban",
-    headerName: "Iban",
+    field: "ore_assenze",
+    headerName: "Ore assenze",
     flex: 1,
     headerAlign: "center",
   },
@@ -63,7 +52,7 @@ export interface AnagraficaProps {
   email: string;
   indirizzo: string;
   data_nascita: string;
-  iban: string;
+  iban: string | null;
 }
 
 export interface ContrattoProps {
@@ -125,7 +114,7 @@ export const initialAnagraficaValues: AnagraficaProps = {
   email: "",
   indirizzo: "",
   data_nascita: "",
-  iban: "",
+  iban: null,
 };
 
 export interface FormDipendenteProps {

@@ -86,7 +86,17 @@ export default function GestioneDipendente() {
   });
 
   const memoizedRows = useMemo(
-    () => data?.dipendente ?? [],
+    () =>
+      data?.dipendente?.map((element: any) => ({
+        ...element,
+        id_dipendente: element.id_dipendente,
+        nome: element.nome,
+        cognome: element.cognome,
+        data_inizio: element?.contratto?.[0].data_inizio,
+        ruolo: element?.contratto?.[0].ruolo,
+        ore_settimanali: element.contratto?.[0].ore_settimanali,
+        ore_assenze: element.assegnazione_corso?.[0].ore_assenza,
+      })),
     [data?.dipendente]
   );
 
@@ -143,7 +153,7 @@ export default function GestioneDipendente() {
                 indirizzo: values.anagrafica.indirizzo,
                 data_nascita: values.anagrafica.data_nascita,
                 codice_fiscale: values.anagrafica.codice_fiscale,
-                iban: values.anagrafica.iban,
+                iban: values.anagrafica.iban ?? null,
               },
 
               id_contratto: values.contratto.id_contratto,
