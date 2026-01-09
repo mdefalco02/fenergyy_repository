@@ -200,6 +200,12 @@ export default function GestioneDipendente() {
     [rowToDelete]
   );
 
+  const onClose = useCallback(() => {
+    setOpen(false);
+    setEditingRow(undefined);
+    formik.resetForm();
+  }, []);
+
   const onConfirmDelete = useCallback(async () => {
     if (!rowToDelete) return;
 
@@ -389,7 +395,9 @@ export default function GestioneDipendente() {
         title="Conferma eliminazione"
         description="Sei sicuro di voler proseguire con l'eliminazione?"
         open={modalOpen}
-        handleClose={() => setModalOpen(false)}
+        handleClose={() => {
+          setModalOpen(false);
+        }}
         handleConfirm={onConfirmDelete}
       ></ConfirmDialog>
       <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
@@ -430,7 +438,7 @@ export default function GestioneDipendente() {
                 mt: "auto",
               }}
             >
-              <Button variant="contained" onClick={() => setOpen(false)}>
+              <Button variant="contained" onClick={onClose}>
                 Indietro
               </Button>
               <Button

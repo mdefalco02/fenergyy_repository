@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
 export const GET_ALL_DIPENDENTI = gql`
-  query FindAllDipendentiCompleti {
+  query FindAllDipendenti {
     dipendente {
       id_dipendente
       nome
