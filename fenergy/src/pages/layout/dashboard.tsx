@@ -126,7 +126,7 @@ export default function Layout() {
             ))}
           </List>
         </SidenavDrawer>
-        <Box sx={{ flex: 1, minWidth: 0, overflow: "auto", p: 2 }}>
+        <Box sx={{ flex: 1, minWidth: 0, overflow: "auto", p: 3 }}>
           <Outlet />
         </Box>
       </Box>

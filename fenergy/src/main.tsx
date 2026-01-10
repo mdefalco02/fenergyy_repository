@@ -5,13 +5,12 @@ import nhost from "../config/nhostClient.tsx";
 import "./index.css";
 
 import { NhostApolloProvider } from "@nhost/react-apollo";
+import App from "./App.tsx";
 import Archivio from "./pages/archivio/index.tsx";
 import Clienti from "./pages/clienti/index.tsx";
 import GestioneDipendente from "./pages/dipendente/index.tsx";
 import Finanza from "./pages/finanza/index.tsx";
-import Layout from "./pages/layout/dashboard.tsx";
 import Schede from "./pages/schede/index.tsx";
-import App from "./App.tsx";
 
 const router = createBrowserRouter([
   {
@@ -26,7 +25,6 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-console.log("Layout mount");
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
