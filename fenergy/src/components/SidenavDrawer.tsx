@@ -22,6 +22,7 @@ const SidenavDrawer = memo(function SidenavDrawer(props: SidenavDrawerProps) {
       sx={{
         width: currentWidth,
         flexShrink: 0,
+        flexBasis: "auto",
         "& .MuiDrawer-paper": {
           width: currentWidth,
           boxSizing: "border-box",
@@ -42,7 +43,7 @@ const SidenavDrawer = memo(function SidenavDrawer(props: SidenavDrawerProps) {
         src={logo}
         sx={{
           display: "flex",
-          justifyContent: "center ",
+          justifyContent: "center",
           alignItems: "center",
           padding: "32px 16px",
           backgroundColor: "black",
