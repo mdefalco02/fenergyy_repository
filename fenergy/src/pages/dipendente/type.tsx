@@ -10,36 +10,44 @@ import dayjs from "dayjs";
 
 export const columns: GridColDef[] = [
   { field: "nome", headerName: "Nome", flex: 1, headerAlign: "center" },
-  {
-    field: "cognome",
-    headerName: "Cognome",
-    flex: 1,
-    headerAlign: "center",
-  },
+  { field: "cognome", headerName: "Cognome", flex: 1, headerAlign: "center" },
+
   {
     field: "ruolo",
     headerName: "Ruolo",
     flex: 1,
     headerAlign: "center",
+    valueGetter: (_value, row: any) => row?.contratto?.[0]?.ruolo ?? "",
   },
   {
     field: "data_inizio",
     headerName: "Data Inizio",
     flex: 1,
     headerAlign: "center",
-    valueFormatter: (params: any) => dayjs(params.value).format("DD/MM/YYYY"),
+    valueGetter: (_value, row: any) => {
+      row?.contratto?.[0]?.data_inizio ?? null;
+    },
+    valueFormatter: (_value, row: any) => {
+      return row?.contratto?.[0].data_inizio
+        ? dayjs(row?.contratto?.[0].data_inizio).format("DD/MM/YYYY")
+        : "";
+    },
   },
   {
     field: "ore_settimanali",
     headerName: "Ore settimanali",
     flex: 1,
     headerAlign: "center",
+    valueGetter: (_value, row: any) =>
+      row?.contratto?.[0]?.ore_settimanali ?? "",
   },
   {
     field: "ore_assenze",
     headerName: "Ore assenze",
     flex: 1,
     headerAlign: "center",
+    valueGetter: (_value, row: any) =>
+      row?.assegnazione_corso?.[0]?.ore_assenza ?? "",
   },
 ];
 

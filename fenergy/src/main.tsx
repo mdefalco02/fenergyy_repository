@@ -1,27 +1,37 @@
-import { StrictMode } from "react";
+import { StrictMode, Suspense, lazy } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import nhost from "../config/nhostClient.tsx";
+import nhost from "../config/nhostClient";
 import "./index.css";
 
 import { NhostApolloProvider } from "@nhost/react-apollo";
-import App from "./App.tsx";
-import Archivio from "./pages/archivio/index.tsx";
-import Clienti from "./pages/clienti/index.tsx";
-import GestioneDipendente from "./pages/dipendente/index.tsx";
-import Finanza from "./pages/finanza/index.tsx";
-import Schede from "./pages/schede/index.tsx";
+import App from "./App";
+import { CircularProgress } from "@mui/material";
+
+// Lazy imports
+const Archivio = lazy(() => import("./pages/archivio"));
+const Clienti = lazy(() => import("./pages/clienti"));
+const GestioneDipendente = lazy(() => import("./pages/dipendente"));
+const Finanza = lazy(() => import("./pages/finanza"));
+const Schede = lazy(() => import("./pages/schede"));
+
+// Wrapper per evitare di ripetere <Suspense> ovunque
+const withSuspense = (Component: React.ComponentType) => (
+  <Suspense fallback={<CircularProgress size={50}></CircularProgress>}>
+    <Component />
+  </Suspense>
+);
 
 const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
     children: [
-      { path: "clienti", Component: Clienti },
-      { path: "schede", Component: Schede },
-      { path: "finance", Component: Finanza },
-      { path: "dipendenti", Component: GestioneDipendente },
-      { path: "archivio", Component: Archivio },
+      { path: "clienti", element: withSuspense(Clienti) },
+      { path: "schede", element: withSuspense(Schede) },
+      { path: "finance", element: withSuspense(Finanza) },
+      { path: "dipendenti", element: withSuspense(GestioneDipendente) },
+      { path: "archivio", element: withSuspense(Archivio) },
     ],
   },
 ]);

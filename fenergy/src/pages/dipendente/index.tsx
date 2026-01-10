@@ -86,17 +86,7 @@ export default function GestioneDipendente() {
   });
 
   const memoizedRows = useMemo(
-    () =>
-      data?.dipendente?.map((element: any) => ({
-        ...element,
-        id_dipendente: element.id_dipendente,
-        nome: element.nome,
-        cognome: element.cognome,
-        data_inizio: element?.contratto?.[0].data_inizio,
-        ruolo: element?.contratto?.[0].ruolo,
-        ore_settimanali: element.contratto?.[0].ore_settimanali,
-        ore_assenze: element.assegnazione_corso?.[0].ore_assenza,
-      })),
+    () => data?.dipendente ?? [],
     [data?.dipendente]
   );
 
